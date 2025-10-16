@@ -246,6 +246,11 @@ export default function App() {
           </div>
         )}
       </main>
+      <footer className="w-full text-center py-4 z-10">
+        <p className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-500">
+            Produced by Tlord ❤️‍🩹
+        </p>
+      </footer>
       <style>{`
         @keyframes fade-in {
           from { opacity: 0; transform: scale(0.98); }
