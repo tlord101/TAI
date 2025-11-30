@@ -69,8 +69,14 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // Strip /TAI prefix for local serving
+  let reqUrl = req.url;
+  if (reqUrl.startsWith('/TAI')) {
+    reqUrl = reqUrl.replace(/^\/TAI/, '') || '/';
+  }
+
   // Static file serving (React SPA)
-  let filePath = req.url === '/' ? path.join(BUILD_DIR, 'index.html') : path.join(BUILD_DIR, req.url);
+  let filePath = reqUrl === '/' ? path.join(BUILD_DIR, 'index.html') : path.join(BUILD_DIR, reqUrl);
 
   // Security: prevent directory traversal
   if (!filePath.startsWith(BUILD_DIR)) {
@@ -79,8 +85,8 @@ const server = http.createServer(async (req, res) => {
 
   fs.readFile(filePath, (err, data) => {
     if (err) {
-      // For SPA, serve index.html for any not-found routes
-      if (err.code === 'ENOENT') {
+      // Only serve index.html for navigation routes (no extension), NOT for missing assets
+      if (err.code === 'ENOENT' && !path.extname(reqUrl)) {
         fs.readFile(path.join(BUILD_DIR, 'index.html'), (err, data) => {
           if (err) {
             res.writeHead(500);
@@ -91,8 +97,9 @@ const server = http.createServer(async (req, res) => {
           res.end(data);
         });
       } else {
-        res.writeHead(500);
-        res.end('Internal Server Error');
+        // Return 404 for missing assets (js, css, images, etc.)
+        res.writeHead(404);
+        res.end('Not Found');
       }
       return;
     }
