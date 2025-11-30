@@ -15,7 +15,7 @@ import { Toaster } from './components/ui/sonner';
 export default function App() {
   return (
     <LanguageProvider>
-      <Router basename="/TAI/">
+      <Router>
         <div className="min-h-screen flex flex-col bg-white">
           <Navbar />
           <main className="flex-1">
