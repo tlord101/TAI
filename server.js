@@ -14,7 +14,7 @@ require('dotenv').config();
 const emailHandler = require('./api/send-email.js');
 
 const PORT = process.env.PORT || 3000;
-const BUILD_DIR = path.join(__dirname, 'build');
+const BUILD_DIR = path.join(__dirname, 'dist');
 
 console.log('🚀 Starting Luxury Real Estate Website Server...\n');
 console.log('Configuration:');
